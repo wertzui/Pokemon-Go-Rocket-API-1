@@ -38,7 +38,7 @@ namespace PokemonGo.RocketAPI.Rpc
                     RequestMessage = message.ToByteString()
                 });
 
-            return await PostProtoPayload<Request, PlayerUpdateResponse>(updatePlayerLocationRequestEnvelope);
+            return (await PostProtoPayload<Request, PlayerUpdateResponse>(updatePlayerLocationRequestEnvelope)).Item1;
         }
 
         public void SetCoordinates(double lat, double lng, double altitude)

@@ -11,6 +11,7 @@ using PokemonGo.RocketAPI.Helpers;
 using PokemonGo.RocketAPI.Login;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
+using POGOProtos.Networking.Responses;
 
 namespace PokemonGo.RocketAPI.Rpc
 {
@@ -38,13 +39,13 @@ namespace PokemonGo.RocketAPI.Rpc
             }
         }
 
-        public async Task DoLogin()
+        public async Task<Response> DoLogin()
         {
             _client.AuthToken = await login.GetAccessToken().ConfigureAwait(false);
-            await SetServer().ConfigureAwait(false);
+            return await SetServer().ConfigureAwait(false);
         }
 
-        private async Task SetServer()
+        private async Task<Response> SetServer()
         {
             #region Standard intial request messages in right Order
 
@@ -85,8 +86,7 @@ namespace PokemonGo.RocketAPI.Rpc
                     RequestMessage = downloadSettingsMessage.ToByteString()
                 });
 
-
-            var serverResponse = await PostProto<Request>(Resources.RpcUrl, serverRequest);
+            var serverResponse = await PostProtoPayload<Request, GetPlayerResponse, GetHatchedEggsResponse, GetInventoryResponse, CheckAwardedBadgesResponse, DownloadSettingsResponse>(serverRequest);
 
             if (serverResponse.AuthTicket == null)
             {
@@ -96,6 +96,8 @@ namespace PokemonGo.RocketAPI.Rpc
 
             _client.AuthTicket = serverResponse.AuthTicket;
             _client.ApiUrl = serverResponse.ApiUrl;
+
+            return serverResponse;
         }
 
     }
