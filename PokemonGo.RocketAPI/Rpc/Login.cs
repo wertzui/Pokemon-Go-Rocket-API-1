@@ -39,13 +39,13 @@ namespace PokemonGo.RocketAPI.Rpc
             }
         }
 
-        public async Task<Response> DoLogin()
+        public async Task<Response<GetPlayerResponse, GetHatchedEggsResponse, GetInventoryResponse, CheckAwardedBadgesResponse, DownloadSettingsResponse>> DoLogin()
         {
             _client.AuthToken = await login.GetAccessToken().ConfigureAwait(false);
             return await SetServer().ConfigureAwait(false);
         }
 
-        private async Task<Response> SetServer()
+        private async Task<Response<GetPlayerResponse, GetHatchedEggsResponse, GetInventoryResponse, CheckAwardedBadgesResponse, DownloadSettingsResponse>> SetServer()
         {
             #region Standard intial request messages in right Order
 
