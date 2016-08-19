@@ -21,6 +21,7 @@ namespace PokemonGo.RocketAPI.Rpc
             _client = client;
         }
 
+        [Obsolete("Use SetCoordinates and call Map.GetMapObjects to update the location.")]
         public async Task<PlayerUpdateResponse> UpdatePlayerLocation(double latitude, double longitude, double altitude)
         {
             SetCoordinates(latitude, longitude, altitude);
@@ -40,7 +41,7 @@ namespace PokemonGo.RocketAPI.Rpc
             return await PostProtoPayload<Request, PlayerUpdateResponse>(updatePlayerLocationRequestEnvelope);
         }
 
-        internal void SetCoordinates(double lat, double lng, double altitude)
+        public void SetCoordinates(double lat, double lng, double altitude)
         {
             _client.CurrentLatitude = lat;
             _client.CurrentLongitude = lng;
